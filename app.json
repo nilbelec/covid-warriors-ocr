@@ -1,9 +1,8 @@
 {
-	"name": "COVID Warriors Tesseract",
-	"description": "Endpoint to the COVID Warriors Tesseract endpoint",
+	"name": "COVID Warriors OCR",
+	"description": "Endpoint to the COVID Warriors OCR endpoint",
 	"keywords": [
 		"COVID",
-		"Tesseract",
 		"OCR"
 	],
 	"success_url": "/",

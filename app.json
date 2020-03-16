@@ -1,0 +1,18 @@
+{
+	"name": "COVID Warriors Tesseract",
+	"description": "Endpoint to the COVID Warriors Tesseract endpoint",
+	"keywords": [
+		"COVID",
+		"Tesseract",
+		"OCR"
+	],
+	"success_url": "/",
+	"buildpacks": [
+		{
+			"url": "heroku/python"
+		},
+		{
+			"url": "https://github.com/nilbelec/heroku-buildpack-tesseract"
+		}
+	]
+}

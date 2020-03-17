@@ -37,8 +37,7 @@ def index():
 @app.route('/process', methods=['POST'])
 def process():
   file = request.files['file']
-  hocr = request.form.get('hocr') or ''
-  ext = '.hocr' if hocr else '.txt'
+  ext = '.txt'
   if file and allowed_file(file.filename):
     folder = os.path.join(app.config['TEMP_FOLDER'], str(os.getpid()))
     os.mkdir(folder)
@@ -46,8 +45,7 @@ def process():
     output_file = os.path.join(folder, app.config['OCR_OUTPUT_FILE'])
     file.save(input_file)
 
-    command = ['tesseract', input_file,
-               output_file, '-l', request.form['lang'], hocr]
+    command = ['tesseract', input_file, output_file, '-l', 'spa+eng']
     proc = subprocess.Popen(command, stderr=subprocess.PIPE)
     proc.wait()
 
@@ -65,7 +63,6 @@ def process():
           u'message': u'Unprocessable Entity'
       })
       resp.status_code = 422
-
     shutil.rmtree(folder)
     return resp
   else:

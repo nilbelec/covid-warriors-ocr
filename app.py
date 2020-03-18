@@ -53,7 +53,7 @@ def process():
 	output_file += '.txt'
 	if os.path.isfile(output_file):
 		with open(output_file) as f:
-			resp = jsonify({'status': 200,'ocr': {k: v.decode() for k, v in enumerate(f.read().splitlines())}})
+			resp = jsonify({'status': 200,'ocr': {k: v for k, v in enumerate(f.read().splitlines())}})
 	else:
 		resp = jsonify({'status': 422,'message': 'Unprocessable Entity'})
 		resp.status_code = 422

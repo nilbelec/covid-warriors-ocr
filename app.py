@@ -46,7 +46,7 @@ def process():
 	file.save(input_file)
 	
 	output_file = os.path.join(folder, 'output')
-	command = ['tesseract', '--tessdata-dir', './.apt/usr/share/tesseract-ocr/4.00', input_file, output_file, '-l', 'spa+eng']
+	command = ['tesseract', '--tessdata-dir', './.apt/usr/share/tesseract-ocr/4.00/tessdata', input_file, output_file, '-l', 'spa+eng']
 	proc = subprocess.Popen(command, stderr=subprocess.PIPE)
 	proc.wait()
 

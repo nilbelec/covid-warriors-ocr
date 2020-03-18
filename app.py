@@ -3,6 +3,7 @@ import subprocess
 import sys
 import logging
 import shutil
+import tempfile
 from flask import Flask, jsonify, render_template, request
 from werkzeug.utils import secure_filename
 
@@ -22,8 +23,8 @@ def allowed_file(filename):
 @app.errorhandler(404)
 def not_found(error):
   resp = jsonify({
-      u'status': 404,
-      u'message': u'Resource not found'
+      'status': 404,
+      'message': 'Resource not found'
   })
   resp.status_code = 404
   return resp
@@ -36,42 +37,31 @@ def index():
 
 @app.route('/process', methods=['POST'])
 def process():
-  file = request.files['file']
-  ext = '.txt'
-  if file and allowed_file(file.filename):
-    folder = os.path.join(app.config['TEMP_FOLDER'], str(os.getpid()))
-    os.mkdir(folder)
-    input_file = os.path.join(folder, secure_filename(file.filename))
-    output_file = os.path.join(folder, app.config['OCR_OUTPUT_FILE'])
-    file.save(input_file)
+	file = request.files['file']
+	if not file or not allowed_file(file.filename):
+		resp = jsonify({'status': 415,'message': 'Unsupported Media Type'})
+		resp.status_code = 415
+		return resp
 
-    command = ['tesseract', input_file, output_file, '-l', 'spa+eng']
-    proc = subprocess.Popen(command, stderr=subprocess.PIPE)
-    proc.wait()
+	folder = tempfile.mkdtemp()
+	input_file = os.path.join(folder, secure_filename(file.filename))
+	file.save(input_file)
+	output_file = os.path.join(folder, 'output')
 
-    output_file += ext
+	command = ['tesseract', input_file, output_file, '-l', 'spa+eng']
+	proc = subprocess.Popen(command, stderr=subprocess.PIPE)
+	proc.wait()
 
-    if os.path.isfile(output_file):
-      f = open(output_file)
-      resp = jsonify({
-          u'status': 200,
-          u'ocr': {k: v for k, v in enumerate(f.read().splitlines())}
-      })
-    else:
-      resp = jsonify({
-          u'status': 422,
-          u'message': u'Unprocessable Entity'
-      })
-      resp.status_code = 422
-    shutil.rmtree(folder)
-    return resp
-  else:
-    resp = jsonify({
-        u'status': 415,
-        u'message': u'Unsupported Media Type'
-    })
-    resp.status_code = 415
-    return resp
+	output_file += '.txt'
+
+	if os.path.isfile(output_file):
+		f = open(output_file)
+		resp = jsonify({'status': 200,'ocr': {k: v for k, v in enumerate(f.read().splitlines())}})
+	else:
+		resp = jsonify({'status': 422,'message': 'Unprocessable Entity'})
+		resp.status_code = 422
+	shutil.rmtree(folder)
+	return resp
 
 
 if __name__ == '__main__':

@@ -8,10 +8,10 @@
 	"success_url": "/",
 	"buildpacks": [
 		{
-			"url": "heroku/python"
+			"url": "heroku-community/apt"
 		},
 		{
-			"url": "https://github.com/nilbelec/heroku-buildpack-tesseract"
+			"url": "heroku/python"
 		}
 	]
 }

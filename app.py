@@ -41,14 +41,13 @@ def process():
 		resp.status_code = 415
 		return resp
 
-	folder = '.' #tempfile.mkdtemp()
+	folder = tempfile.mkdtemp()
 	input_file = os.path.join(folder, secure_filename(file.filename))
 	file.save(input_file)
 	
 	output_file = os.path.join(folder, 'output')
 	command = ['tesseract', '--tessdata-dir', './.apt/usr/share/tesseract-ocr/4.00/tessdata', input_file, output_file, '-l', 'spa+eng']
-	proc = subprocess.Popen(command, stderr=subprocess.PIPE)
-	proc.wait()
+	subprocess.run(command)
 
 	output_file += '.txt'
 	if os.path.isfile(output_file):
@@ -57,7 +56,7 @@ def process():
 	else:
 		resp = jsonify({'status': 422,'message': 'Unprocessable Entity'})
 		resp.status_code = 422
-	#shutil.rmtree(folder)
+	shutil.rmtree(folder)
 	return resp
 
 

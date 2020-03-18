@@ -57,7 +57,7 @@ def process():
 	else:
 		resp = jsonify({'status': 422,'message': 'Unprocessable Entity'})
 		resp.status_code = 422
-	shutil.rmtree(folder)
+	#shutil.rmtree(folder)
 	return resp
 
 

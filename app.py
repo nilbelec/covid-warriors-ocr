@@ -47,13 +47,13 @@ def process():
 	file.save(input_file)
 	
 	output_file = os.path.join(folder, 'output')
-	command = ['tesseract', '--tessdata-dir', './.apt/usr/share/tesseract-ocr/4.00/tessdata', input_file, output_file, '-l', 'spa+eng']
+	command = ['tesseract', input_file, output_file, '-l', 'spa+eng']
 	subprocess.run(command)
 
 	output_file += '.txt'
 	if os.path.isfile(output_file):
 		with open(output_file, encoding="UTF-8") as f:
-			resp = jsonify({'status': 200,'text': f.read()})
+			resp = jsonify({'status': 200,'text': {k: v for k, v in enumerate(f.read().splitlines())}})
 	else:
 		resp = jsonify({'status': 422,'message': 'Unprocessable Entity'})
 		resp.status_code = 422

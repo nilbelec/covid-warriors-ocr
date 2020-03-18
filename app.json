@@ -13,5 +13,11 @@
 		{
 			"url": "heroku/python"
 		}
-	]
+	],
+	"env": {
+	  "TESSDATA_PREFIX": {
+		"description": "Tesseract trained data folder",
+		"value": "/app/.apt/usr/share/tesseract-ocr/4.00/tessdata"
+	  }
+	}
 }

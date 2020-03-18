@@ -45,7 +45,6 @@ def process():
 	input_file = os.path.join(folder, secure_filename(file.filename))
 	file.save(input_file)
 	output_file = os.path.join(folder, 'output')
-
 	command = ['tesseract', input_file, output_file, '-l', 'spa+eng']
 	proc = subprocess.Popen(command, stderr=subprocess.PIPE)
 	proc.wait()

@@ -44,13 +44,13 @@ def process():
 	folder = tempfile.mkdtemp()
 	input_file = os.path.join(folder, secure_filename(file.filename))
 	file.save(input_file)
+	
 	output_file = os.path.join(folder, 'output')
-	command = ['tesseract', input_file, output_file, '-l', 'spa+eng']
+	command = ['tesseract', '--tessdata-dir', './.apt/usr/share/tesseract-ocr/4.00', input_file, output_file, '-l', 'spa+eng']
 	proc = subprocess.Popen(command, stderr=subprocess.PIPE)
 	proc.wait()
 
 	output_file += '.txt'
-
 	if os.path.isfile(output_file):
 		f = open(output_file)
 		resp = jsonify({'status': 200,'ocr': {k: v for k, v in enumerate(f.read().splitlines())}})

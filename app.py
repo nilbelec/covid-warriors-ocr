@@ -41,7 +41,7 @@ def process():
 		resp.status_code = 415
 		return resp
 
-	folder = tempfile.mkdtemp()
+	folder = '.' #tempfile.mkdtemp()
 	input_file = os.path.join(folder, secure_filename(file.filename))
 	file.save(input_file)
 	

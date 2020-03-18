@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['JSON_AS_ASCII'] = False
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 
@@ -52,7 +53,7 @@ def process():
 	output_file += '.txt'
 	if os.path.isfile(output_file):
 		with open(output_file, encoding="UTF-8") as f:
-			resp = jsonify({'prueba': 'Álvarez Ñ', 'status': 200,'ocr': {k: v for k, v in enumerate(f.read().splitlines())}})
+			resp = jsonify({'status': 200,'ocr': {k: v for k, v in enumerate(f.read().splitlines())}})
 	else:
 		resp = jsonify({'status': 422,'message': 'Unprocessable Entity'})
 		resp.status_code = 422
